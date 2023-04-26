@@ -60,7 +60,7 @@ tvos:
 	mkdir -p runtimes/tvos
 	cp build/tvos/whisper.cpp/libwhisper.dylib runtimes/tvos/libwhisper.dylib
 
-libs:
+lipo:
 	mkdir -p lib/tvos-simulator
 	lipo -create runtimes/tvos_simulator_arm64/libwhisper.dylib -create runtimes/tvos_simulator_x64/libwhisper.dylib -output lib/tvos-simulator/libwhisper.dylib
 	mkdir -p lib/ios-simulator
@@ -73,7 +73,25 @@ libs:
 	cp runtimes/tvos/libwhisper.dylib lib/tvos-device/libwhisper.dylib
 	mkdir -p lib/macos
 	cp runtimes/macos/libwhisper.dylib lib/macos/libwhisper.dylib
-	
+
+android_arm64-v8a:
+	cmake -DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) -DCMAKE_SYSTEM_NAME=Android -DCMAKE_ANDROID_API=21 -DCMAKE_ANDROID_NDK=/Users/drasticactions/Library/Developer/Xamarin/android-sdk-macosx/ndk-bundle -S . -B build/android-arm64-v8a
+	cmake --build build/android-arm64-v8a
+	mkdir -p runtimes/android-arm64-v8a
+	cp build/android-arm64-v8a/whisper.cpp/libwhisper.so runtimes/android-arm64-v8a/libwhisper.so
+
+android_x86:
+	cmake -DCMAKE_ANDROID_ARCH_ABI=x86 -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) -DCMAKE_SYSTEM_NAME=Android -DCMAKE_ANDROID_API=21 -DCMAKE_ANDROID_NDK=/Users/drasticactions/Library/Developer/Xamarin/android-sdk-macosx/ndk-bundle -S . -B build/android-x86
+	cmake --build build/android-x86
+	mkdir -p runtimes/android-x86
+	cp build/android-x86/whisper.cpp/libwhisper.so runtimes/android-x86/libwhisper.so
+
+android_x86_64:
+	cmake -DCMAKE_ANDROID_ARCH_ABI=x86_64 -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) -DCMAKE_SYSTEM_NAME=Android -DCMAKE_ANDROID_API=21 -DCMAKE_ANDROID_NDK=/Users/drasticactions/Library/Developer/Xamarin/android-sdk-macosx/ndk-bundle -S . -B build/android-x86_64
+	cmake --build build/android-x86_64
+	mkdir -p runtimes/android-x86_64
+	cp build/android-x86_64/whisper.cpp/libwhisper.so runtimes/android-x86_64/libwhisper.so
+
 xcframework:
 	mkdir -p output/lib
 	xcrun xcodebuild -create-xcframework -library lib/ios-device/libwhisper.dylib -library lib/ios-simulator/libwhisper.dylib -library lib/tvos-device/libwhisper.dylib -library lib/tvos-simulator/libwhisper.dylib -library lib/macos/libwhisper.dylib -library lib/maccatalyst/libwhisper.dylib -output output/lib/whisper.xcframework
