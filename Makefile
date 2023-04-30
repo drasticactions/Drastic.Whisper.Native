@@ -1,5 +1,17 @@
 BUILD_TYPE=Release
 
+linux_x64:
+	cmake -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) -S . -B build/linux-x64
+	cmake --build build/linux-x64 --config $(BUILD_TYPE)
+	mkdir -p runtimes/linux-x64
+	cp build/linux-x64/whisper.cpp/libwhisper.so ./runtimes/linux-x64/whisper.so
+
+linux_arm64:
+	cmak -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) -S . -B build/linux-arm64
+	cmake --build build/linux-arm64 --config $(BUILD_TYPE)
+	mkdir -p runtimes/linux-arm64
+	cp build/linux-arm64/whisper.cpp/libwhisper.so ./runtimes/linux-arm64/whisper.so
+
 macos:
 	cmake -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) -DCMAKE_TOOLCHAIN_FILE=ios.toolchain.cmake -DPLATFORM=MAC_UNIVERSAL -S . -B build/macos
 	cmake --build build/macos
